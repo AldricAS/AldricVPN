@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aldric VPN</title>
+  <meta name="theme-color" content="#0ea5e9"/>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <style>
+    :root { --bg:#0b1220; --card:#111827; --accent:#0ea5e9; --ok:#22c55e; --warn:#f97316; --text:#e5e7eb; --muted:#9ca3af; }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{ margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; background: radial-gradient(1000px 600px at 80% -10%, rgba(14,165,233,.25), transparent 60%), var(--bg); color:var(--text);}
+    .wrap{ max-width:900px; margin:0 auto; padding:24px;}
+    header{ display:flex; align-items:center; gap:12px; margin:16px 0 24px}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:grid;place-items:center;box-shadow:0 10px 30px rgba(14,165,233,.35);}
+    .logo span{font-weight:800;letter-spacing:.5px}
+    h1{ margin:0; font-size:28px}
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:18px; box-shadow: 0 8px 30px rgba(0,0,0,.35);}
+    .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:16px;}
+    button, .btn{ appearance:none; border:none; border-radius:14px; padding:12px 14px; font-weight:700; color:#0b1220; background:var(--accent); cursor:pointer; transition: transform .05s ease; text-decoration:none; display:inline-block; }
+    button:active{ transform: scale(.98);}
+    .muted{ color:var(--muted); font-size:14px}
+    input[type=file]{ display:none}
+    .pill{ font-size:12px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);}
+    .footer{ color:var(--muted); font-size:12px; text-align:center; margin-top:18px}
+    .title{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .title small{color:var(--muted)}
+    .danger{ background:#ef4444; color:white}
+    .ok{ background:var(--ok); color:#06110a}
+    .linkBtn{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--text)}
+    .hidden{display:none}
+    .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo"><span>AV</span></div>
+      <div>
+        <h1>Aldric VPN</h1>
+        <div class="muted">Satu klik impor profil OpenVPN & ganti server (no Termux, no root).</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <div class="title"><strong>1) Ambil Server Gratis</strong><small>Rekomendasi: SG/JP</small></div>
+        <p class="muted">Buka salah satu situs berikut dan unduh berkas <span class="pill">.ovpn</span>:</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <a class="btn linkBtn" target="_blank" rel="noopener" href="https://www.vpngate.net/en/">VPNGate</a>
+          <a class="btn linkBtn" target="_blank" rel="noopener" href="https://www.vpnjantit.com/free-openvpn">VPNjantit</a>
+          <a class="btn linkBtn" target="_blank" rel="noopener" href="https://freevpn.me/accounts/">freevpn.me</a>
+        </div>
+        <p class="muted">Tips: pilih server dengan <em>uptime</em> tinggi dan ping kecil (&lt;100ms jika bisa).</p>
+      </section>
+
+      <section class="card">
+        <div class="title"><strong>2) Branding Jadi “Aldric VPN”</strong><small>Otomatis rename</small></div>
+        <p class="muted">Impor berkas <span class="pill">.ovpn</span> di sini, kami rename jadi <span class="pill">AldricVPN-*.ovpn</span> biar ada namamu.</p>
+        <form id="renameForm">
+          <input id="ovpnFile" type="file" accept=".ovpn" />
+          <div style="display:flex; gap:8px;flex-wrap:wrap">
+            <label for="ovpnFile" class="btn">Pilih .ovpn</label>
+            <button type="button" id="downloadRenamed" class="btn ok" disabled>Download versi “Aldric VPN”</button>
+          </div>
+          <div id="fileInfo" class="muted"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="title"><strong>3) Impor ke OpenVPN</strong><small>Roblox siap!</small></div>
+        <p class="muted">Install <b>OpenVPN Connect</b> dari Play Store. Lalu impor file <span class="pill">AldricVPN-*.ovpn</span> yang barusan kamu download.</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <a class="btn" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn">Install OpenVPN Connect</a>
+          <a class="btn linkBtn" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=de.blinkt.openvpn">Alternatif: OpenVPN for Android</a>
+        </div>
+        <p class="muted">Setelah impor → Connect. Kalau server penuh/lemot, ulangi langkah 1 dan ganti file .ovpn-nya.</p>
+      </section>
+
+      <section class="card">
+        <div class="title"><strong>FAQ Singkat</strong><small></small></div>
+        <ul class="muted">
+          <li><b>Apakah ini VPN murni milik saya?</b> Ini <em>branding</em> di atas server gratis. Aman dipakai pribadi.</li>
+          <li><b>Roblox jalan?</b> Ya, karena koneksi game lewat VPN sistem, bukan sekadar browser.</li>
+          <li><b>Kenapa pakai OpenVPN?</b> Karena server gratis paling banyak format .ovpn.</li>
+        </ul>
+      </section>
+    </div>
+
+    <p class="footer">© 2025 Aldric VPN — PWA. Tambahkan ke layar utama untuk pengalaman seperti aplikasi.</p>
+  </div>
+
+  <script>
+    // Service worker register
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+
+    // Rename logic
+    const input = document.getElementById('ovpnFile');
+    const btn = document.getElementById('downloadRenamed');
+    const info = document.getElementById('fileInfo');
+
+    let fileBuffer = null;
+    let originalName = '';
+
+    input.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      originalName = file.name;
+      fileBuffer = await file.arrayBuffer();
+      btn.disabled = false;
+      info.textContent = `File terpilih: ${file.name} • ${Math.round(file.size/1024)} KB`;
+    });
+
+    btn.addEventListener('click', () => {
+      if (!fileBuffer) return;
+      const now = new Date();
+      const stamp = now.toISOString().slice(0,10);
+      const renamed = `AldricVPN-${stamp}.ovpn`;
+      const blob = new Blob([fileBuffer], {type: 'application/x-openvpn-profile'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = renamed; a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
